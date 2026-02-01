@@ -1,87 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>💖 Secret Valentine 💖</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-      text-align: center;
-      padding: 40px;
-      color: #fff;
-    }
-    .card {
-      background: rgba(0,0,0,0.2);
-      padding: 30px;
-      border-radius: 20px;
-      max-width: 400px;
-      margin: auto;
-    }
-    button {
-      padding: 12px 20px;
-      font-size: 18px;
-      border: none;
-      border-radius: 25px;
-      cursor: pointer;
-      margin: 10px;
-    }
-    #yes { background: #ff4d6d; color: white; }
-    #no { background: #555; color: white; position: absolute; }
-    input {
-      padding: 10px;
-      border-radius: 10px;
-      border: none;
-      font-size: 16px;
-    }
-    #hidden { display: none; }
-  </style>
+<meta charset="UTF-8">
+<title>❤️ A Very Serious Question ❤️</title>
+
+<style>
+body {
+  font-family: "Arial", sans-serif;
+  background: radial-gradient(circle at top, #7a0019, #1a0006);
+  color: #fff;
+  text-align: center;
+  padding: 40px;
+}
+
+.card {
+  background: rgba(0,0,0,0.4);
+  padding: 35px;
+  border-radius: 25px;
+  max-width: 420px;
+  margin: auto;
+  box-shadow: 0 0 25px rgba(255,0,0,0.3);
+}
+
+h1 {
+  margin-bottom: 15px;
+}
+
+button {
+  padding: 14px 26px;
+  font-size: 18px;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  margin: 12px;
+  transition: all 0.3s ease;
+}
+
+#yes {
+  background: linear-gradient(45deg, #ff1e56, #ff4d4d);
+  color: white;
+}
+
+#no {
+  background: #222;
+  color: white;
+  position: absolute;
+}
+
+input {
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 12px;
+  border: none;
+  text-align: center;
+}
+
+#hidden {
+  display: none;
+}
+
+#timer {
+  margin-top: 10px;
+  font-weight: bold;
+}
+</style>
 </head>
 
 <body>
 
+<!-- PASSWORD SCREEN -->
 <div class="card" id="lock">
-  <h1>🔐 Enter the Secret Password</h1>
-  <input id="pw" placeholder="Hint: ❤️">
+  <h1>🔐 Private Access</h1>
+  <p>This page contains feelings.</p>
+  <input id="pw" placeholder="Password ❤️">
   <br><br>
-  <button onclick="unlock()">Unlock</button>
+  <button onclick="unlock()">Enter</button>
 </div>
 
+<!-- MAIN QUESTION -->
 <div class="card" id="hidden">
-  <h1>💘 Will You Be My Valentine? 💘</h1>
-  <h3 id="timer"></h3>
-  <button id="yes" onclick="yes()">YES 💕</button>
-  <button id="no" onmouseover="run()">NO 🙃</button>
+  <h1>❤️ Will You Be My Valentine? ❤️</h1>
+  <div id="timer"></div>
+  <br>
+  <button id="yes" onclick="confirmYes()">YES 😌❤️</button>
+  <button id="no" onmouseover="escapeNo()">NO 😐</button>
 </div>
 
 <script>
-  function unlock() {
-    if (document.getElementById("pw").value === "heart") {
-      document.getElementById("lock").style.display = "none";
-      document.getElementById("hidden").style.display = "block";
-    } else {
-      alert("❌ Wrong password. Try again, lover.");
+let yesScale = 1;
+
+function unlock() {
+  if (document.getElementById("pw").value.toLowerCase() === "heart") {
+    document.getElementById("lock").style.display = "none";
+    document.getElementById("hidden").style.display = "block";
+  } else {
+    alert("❌ Wrong password. Try again, heartbreak.");
+  }
+}
+
+function escapeNo() {
+  const no = document.getElementById("no");
+
+  no.style.top = Math.random() * 80 + "vh";
+  no.style.left = Math.random() * 80 + "vw";
+
+  yesScale += 0.15;
+  document.getElementById("yes").style.transform =
+    "scale(" + yesScale + ")";
+}
+
+function confirmYes() {
+  const confirmations = [
+    "Are you REALLY sure? 🤨",
+    "Like… emotionally sure? 😏",
+    "This decision is legally binding btw 👀",
+    "No refunds. No returns. Still yes? 😌",
+    "Last chance to escape 😈"
+  ];
+
+  for (let i = 0; i < confirmations.length; i++) {
+    if (!confirm(confirmations[i])) {
+      alert("❌ Wrong answer. Try again.");
+      return;
     }
   }
 
-  function run() {
-    const no = document.getElementById("no");
-    no.style.top = Math.random()*80 + "vh";
-    no.style.left = Math.random()*80 + "vw";
-  }
+  alert("❤️ Congratulations. You are officially my Valentine. ❤️");
+}
 
-  function yes() {
-    alert("💖 YAY!!! Best decision of your life 💖");
-  }
+// COUNTDOWN TIMER
+const vday = new Date("Feb 14, 2026 00:00:00").getTime();
 
-  const vday = new Date("Feb 14, 2026 00:00:00").getTime();
-  setInterval(() => {
-    const now = new Date().getTime();
-    const diff = vday - now;
-    const d = Math.floor(diff / (1000*60*60*24));
-    document.getElementById("timer").innerHTML =
-      "⏳ " + d + " days until Valentine’s Day!";
-  }, 1000);
+setInterval(() => {
+  const now = new Date().getTime();
+  const diff = vday - now;
+
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((diff / (1000 * 60)) % 60);
+
+  document.getElementById("timer").innerHTML =
+    `⏳ ${days} days ${hours}h ${minutes}m until Valentine’s Day`;
+}, 1000);
 </script>
 
 </body>
